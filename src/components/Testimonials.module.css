@@ -1,0 +1,57 @@
+.testimonials {
+  padding: 7rem 0;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  margin-top: 50px;
+}
+.card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 40px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(138, 43, 226, 0.15);
+}
+.quoteIcon {
+  font-size: 3rem;
+  color: rgba(138, 43, 226, 0.4);
+  position: absolute;
+  top: 20px;
+  right: 30px;
+}
+.text {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.8;
+  margin-bottom: 25px;
+  position: relative;
+  z-index: 1;
+}
+.stars {
+  color: #ffd700;
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  letter-spacing: 2px;
+}
+.author h4 {
+  color: #fff;
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+}
+.author span {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.9rem;
+}
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

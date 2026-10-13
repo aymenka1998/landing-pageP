@@ -1,0 +1,58 @@
+.howItWorks {
+  padding: 7rem 0;
+}
+.stepsContainer {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  margin-top: 50px;
+  position: relative;
+}
+.step {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 40px 20px;
+  text-align: center;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.step:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 30px rgba(138, 43, 226, 0.2);
+}
+.stepNumber {
+  font-size: 4rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #8a2be2, #ffd700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 20px;
+  line-height: 1;
+}
+.stepTitle {
+  font-size: 1.5rem;
+  color: #fff;
+  margin-bottom: 15px;
+}
+.stepDesc {
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+}
+.connector {
+  position: absolute;
+  top: 30%;
+  left: -20px;
+  width: 40px;
+  border-top: 2px dashed rgba(138, 43, 226, 0.5);
+}
+@media (max-width: 768px) {
+  .stepsContainer {
+    flex-direction: column;
+  }
+  .connector {
+    display: none;
+  }
+}

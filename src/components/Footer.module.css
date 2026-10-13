@@ -1,0 +1,45 @@
+.footer {
+  background: linear-gradient(to top, rgba(10, 10, 10, 1), rgba(10, 10, 10, 0));
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 60px 0 20px;
+  margin-top: 50px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+.brand h2 {
+  font-size: 1.8rem;
+  background: linear-gradient(135deg, #8a2be2, #ffd700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 15px;
+}
+.brand p {
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+  max-width: 400px;
+}
+.contact h3 {
+  font-size: 1.2rem;
+  color: #fff;
+  margin-bottom: 20px;
+}
+.contact p {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 10px;
+}
+.copyright {
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 20px;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.9rem;
+}
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

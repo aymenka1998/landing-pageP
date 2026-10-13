@@ -1,0 +1,329 @@
+.thankYouWrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: radial-gradient(circle at top right, #1f1235, #0a0a0a);
+  color: white;
+  direction: rtl;
+}
+
+.container {
+  width: 100%;
+  max-width: 42rem; /* max-w-2xl */
+}
+
+.glassCard {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border-radius: 1.5rem; /* rounded-3xl */
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .glassCard {
+    padding: 3rem; /* md:p-12 */
+  }
+}
+
+.glowOrb {
+  position: absolute;
+  width: 8rem;
+  height: 8rem;
+  border-radius: 50%;
+  filter: blur(3rem);
+  opacity: 0.2;
+}
+
+.primaryGlow {
+  top: 0;
+  right: 0;
+  margin-right: -4rem;
+  margin-top: -4rem;
+  background-color: #8b5cf6;
+}
+
+.secondaryGlow {
+  bottom: 0;
+  left: 0;
+  margin-left: -4rem;
+  margin-bottom: -4rem;
+  background-color: #d946ef;
+}
+
+.iconWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 10;
+}
+
+.iconCircle {
+  width: 6rem;
+  height: 6rem;
+  background-color: rgba(16, 185, 129, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(16, 185, 129, 0.5);
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
+  animation: bounceSlow 3s infinite;
+}
+
+.checkSvg {
+  width: 3rem;
+  height: 3rem;
+  color: #10b981;
+}
+
+@keyframes bounceSlow {
+  0%, 100% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+.title {
+  font-size: 1.875rem; /* text-3xl */
+  line-height: 2.25rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  background: linear-gradient(to right, #ffffff, #d8b4fe);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+  z-index: 10;
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: 2.25rem; /* md:text-4xl */
+    line-height: 2.5rem;
+  }
+}
+
+.subtitle {
+  font-size: 1.125rem;
+  color: #d1d5db; /* text-gray-300 */
+  margin-bottom: 2rem;
+  line-height: 1.625;
+  position: relative;
+  z-index: 10;
+}
+
+@media (min-width: 768px) {
+  .subtitle {
+    font-size: 1.25rem; /* md:text-xl */
+  }
+}
+
+.textGreen { color: #4ade80; }
+.textYellow { color: #facc15; }
+
+.summaryBox {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  text-align: right;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+  z-index: 10;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.summaryRowTotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summaryLabel { color: #9ca3af; }
+.summaryValue { font-weight: 700; color: white; font-size: 0.875rem; }
+@media (min-width: 768px) { .summaryValue { font-size: 1rem; } }
+.summaryTotal { font-weight: 700; color: #8b5cf6; font-size: 1.25rem; }
+
+.upsellBox {
+  background: linear-gradient(to right, rgba(139, 92, 246, 0.1), rgba(217, 70, 239, 0.1));
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 10;
+  transition: transform 0.3s;
+}
+
+.upsellBox:hover {
+  transform: scale(1.02);
+}
+
+.upsellBadge {
+  position: absolute;
+  top: -0.75rem;
+  right: 1.5rem;
+  background-color: #ef4444;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .5; }
+}
+
+.upsellTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.upsellDesc {
+  font-size: 0.875rem;
+  color: #d1d5db;
+  margin-bottom: 1rem;
+}
+
+.upsellAction {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .upsellAction {
+    flex-direction: row;
+  }
+}
+
+.upsellPrice {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.oldPrice {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  text-decoration: line-through;
+  display: block;
+}
+
+.newPrice {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #d946ef;
+  display: block;
+}
+
+.upsellBtn {
+  width: 100%;
+  text-align: center;
+  background-color: white;
+  color: #0f0b18;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  transition: background-color 0.2s;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 640px) {
+  .upsellBtn { width: auto; }
+}
+
+.upsellBtn:hover {
+  background-color: #e5e7eb;
+}
+
+.actionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+}
+
+@media (min-width: 640px) {
+  .actionButtons {
+    flex-direction: row;
+  }
+}
+
+.supportBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #16a34a;
+  color: white;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  transition: background-color 0.2s;
+  box-shadow: 0 10px 15px -3px rgba(20, 83, 45, 0.5);
+  width: 100%;
+}
+
+.supportBtn:hover { background-color: #22c55e; }
+
+.waIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.homeBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+.homeBtn:hover { background-color: rgba(255, 255, 255, 0.2); }
+
+@media (min-width: 640px) {
+  .supportBtn, .homeBtn { width: auto; }
+}
+
+.copyright {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 2rem;
+  position: relative;
+  z-index: 10;
+}
