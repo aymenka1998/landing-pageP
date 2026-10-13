@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import styles from './Hero.module.css';
 import productConfig from '@/config/product';
 
@@ -75,10 +76,13 @@ export default function Hero() {
           <div className={styles.galleryContainer}>
             <div className={styles.mainImageWrapper}>
               <span className={styles.angleTag}>{currentImage.title}</span>
-              <img 
+              <Image
                 key={currentImage.src} 
                 src={currentImage.src} 
                 alt={currentImage.title} 
+                fill
+                sizes="(max-width: 900px) 100vw, 480px"
+                preload
                 className={styles.productImage} 
               />
               <div className={styles.imageGlow}></div>
@@ -111,7 +115,7 @@ export default function Hero() {
                   onClick={() => setSelectedImageIndex(idx)}
                   className={`${styles.thumbBtn} ${selectedImageIndex === idx ? styles.activeThumb : ''}`}
                 >
-                  <img src={img.src} alt={img.title} className={styles.thumbImage} />
+                  <Image src={img.src} alt={img.title} fill sizes="70px" className={styles.thumbImage} />
                 </button>
               ))}
             </div>

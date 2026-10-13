@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import styles from './ProductGallery.module.css';
 import productConfig from '@/config/product';
 
@@ -20,7 +21,13 @@ export default function ProductGallery() {
               className={styles.card}
             >
               <div className={styles.imageContainer}>
-                <img src={img.src} alt={img.title} className={styles.image} />
+                <Image
+                  src={img.src}
+                  alt={img.title}
+                  fill
+                  sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 25vw"
+                  className={styles.image}
+                />
                 <div className={styles.overlay}>
                   <span className={styles.angleTag}>{img.title}</span>
                 </div>

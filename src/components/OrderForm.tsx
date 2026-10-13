@@ -1,5 +1,6 @@
 'use client';
 import { useState, type ChangeEvent, type FormEvent } from 'react';
+import { useRouter } from 'next/navigation';
 import productConfig from '@/config/product';
 import styles from './OrderForm.module.css';
 
@@ -12,6 +13,7 @@ type OrderFormData = {
 };
 
 export default function OrderForm() {
+  const router = useRouter();
   const [formData, setFormData] = useState<OrderFormData>({
     name: '', phone: '', city: 'الجزائر', qty: 1, notes: ''
   });
@@ -71,7 +73,7 @@ export default function OrderForm() {
     const waUrl = `https://wa.me/${productConfig.whatsappNumber}?text=${encodeURIComponent(message)}`;
     window.location.href = waUrl;
     // Keep the WhatsApp handoff inside the original user gesture, then show confirmation.
-    window.setTimeout(() => window.location.assign('/thank-you'), 1500);
+    window.setTimeout(() => router.push('/thank-you'), 1500);
     void apiRequest;
   };
 

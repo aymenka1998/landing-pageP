@@ -285,6 +285,7 @@
 }
 
 .thumbBtn {
+  position: relative;
   width: 70px;
   height: 70px;
   border-radius: 14px;
