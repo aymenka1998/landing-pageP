@@ -1,64 +1,84 @@
 import { NextResponse } from 'next/server';
-import type { OrderData } from '@/config/product';
+import productConfig from '@/config/product';
+
+const PHONE_PATTERN = /^(?:0[567]\d{8}|\+?213[567]\d{8})$/;
+const MAX_BODY_BYTES = 16 * 1024;
+
+function errorResponse(message: string, status: number) {
+  return NextResponse.json({ success: false, message }, { status });
+}
 
 export async function POST(request: Request) {
+  const contentLength = Number(request.headers.get('content-length') || 0);
+  if (contentLength > MAX_BODY_BYTES) {
+    return errorResponse('حجم بيانات الطلب أكبر من المسموح.', 413);
+  }
+
+  let body: unknown;
   try {
-    const body = (await request.json()) as OrderData;
-    
-    const { name, phone, city, qty, notes, product, price, total, date } = body;
-    const normalizedPhone = typeof phone === 'string' ? phone.replace(/[\s()-]/g, '') : '';
-    const phoneIsValid = /^(?:0[567]\d{8}|\+?213[567]\d{8})$/.test(normalizedPhone);
-    const quantity = Number(qty);
-    const maxQty = Number((await import('@/config/product.json')).default.maxQty);
-    if (typeof name !== 'string' || !name.trim() || !phoneIsValid || !Number.isInteger(quantity) || quantity < 1 || quantity > maxQty) {
-      return NextResponse.json({ success: false, message: 'الاسم أو رقم الهاتف أو الكمية غير صالح' }, { status: 400 });
-    }
+    body = await request.json();
+  } catch {
+    return errorResponse('بيانات الطلب غير صالحة.', 400);
+  }
 
-    // Forward to Google Sheets webhook if configured
-    const webhookUrl = process.env.GOOGLE_SHEET_WEBHOOK;
-    if (webhookUrl) {
-      try {
-        const response = await fetch(webhookUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            date: date || new Date().toLocaleString('ar-DZ'),
-            name,
-            phone: normalizedPhone,
-            city,
-            product,
-            price,
-            qty: quantity,
-            total,
-            notes: notes || '',
-            status: 'جديد'
-          })
-        });
-        if (!response.ok) {
-          return NextResponse.json(
-            { success: false, message: 'تعذر حفظ الطلب. حاول مرة أخرى أو تواصل عبر واتساب.' },
-            { status: 502 }
-          );
-        }
-      } catch (webhookError) {
-        console.error('Order webhook request failed.');
-        return NextResponse.json(
-          { success: false, message: 'تعذر حفظ الطلب. حاول مرة أخرى أو تواصل عبر واتساب.' },
-          { status: 502 }
-        );
-      }
-    }
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return errorResponse('بيانات الطلب غير صالحة.', 400);
+  }
 
-    return NextResponse.json({ 
-      success: true, 
-      message: 'تم استلام الطلب بنجاح' 
+  const input = body as Record<string, unknown>;
+  const name = typeof input.name === 'string' ? input.name.trim() : '';
+  const phone = typeof input.phone === 'string' ? input.phone.replace(/[\s()-]/g, '') : '';
+  const city = typeof input.city === 'string' ? input.city.trim() : '';
+  const notes = typeof input.notes === 'string' ? input.notes.trim() : '';
+  const quantity = Number(input.qty);
+
+  if (!name || name.length > 120 || !PHONE_PATTERN.test(phone) ||
+      !productConfig.cities.includes(city) || !Number.isInteger(quantity) ||
+      quantity < 1 || quantity > productConfig.maxQty || notes.length > 1000) {
+    return errorResponse('تحقق من الاسم ورقم الهاتف والمدينة والكمية والملاحظات.', 400);
+  }
+
+  // Never trust product, price, total, date, or status sent by the browser.
+  const order = {
+    date: new Date().toLocaleString('ar-DZ'),
+    name,
+    phone,
+    city,
+    product: productConfig.name,
+    price: productConfig.price,
+    qty: quantity,
+    total: productConfig.price * quantity,
+    notes,
+    status: 'جديد',
+  };
+
+  const webhookUrl = process.env.GOOGLE_SHEET_WEBHOOK;
+  if (!webhookUrl) {
+    // WhatsApp remains available, but be explicit that nothing was persisted.
+    return NextResponse.json({ success: true, persisted: false });
+  }
+
+  try {
+    const response = await fetch(webhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(order),
+      signal: AbortSignal.timeout(8000),
+      cache: 'no-store',
     });
 
-  } catch (error) {
-    console.error('Order API error:', error);
-    return NextResponse.json(
-      { success: false, message: 'حدث خطأ في معالجة الطلب' },
-      { status: 500 }
-    );
+    if (!response.ok) {
+      return errorResponse('تعذر حفظ الطلب. أعد المحاولة أو أكمل الطلب عبر واتساب.', 502);
+    }
+
+    // Apps Script can return HTTP 200 when its own handler failed.
+    const result: unknown = await response.json().catch(() => null);
+    if (!result || typeof result !== 'object' || (result as { success?: unknown }).success !== true) {
+      return errorResponse('لم يؤكد جدول الطلبات حفظ الطلب. أعد المحاولة أو أكمل عبر واتساب.', 502);
+    }
+
+    return NextResponse.json({ success: true, persisted: true });
+  } catch {
+    return errorResponse('تعذر الاتصال بخدمة حفظ الطلبات. أعد المحاولة أو أكمل عبر واتساب.', 502);
   }
 }

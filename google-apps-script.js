@@ -23,17 +23,23 @@ function doPost(e) {
   try {
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
     var data = JSON.parse(e.postData.contents);
+
+    // Keep customer-controlled strings from being interpreted as spreadsheet formulas.
+    function safeCell(value) {
+      var text = String(value || '');
+      return /^[=+@\-\t\r]/.test(text) ? "'" + text : text;
+    }
     
     sheet.appendRow([
       data.date || new Date().toLocaleString('ar-DZ'),
-      data.name || '',
-      data.phone || '',
-      data.city || '',
+      safeCell(data.name),
+      safeCell(data.phone),
+      safeCell(data.city),
       data.product || '',
       data.price || '',
       data.qty || '',
       data.total || '',
-      data.notes || '',
+      safeCell(data.notes),
       data.status || 'جديد'
     ]);
     

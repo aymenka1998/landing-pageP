@@ -1,6 +1,5 @@
 'use client';
 import { useState, type ChangeEvent, type FormEvent } from 'react';
-import { useRouter } from 'next/navigation';
 import productConfig from '@/config/product';
 import styles from './OrderForm.module.css';
 
@@ -13,11 +12,11 @@ type OrderFormData = {
 };
 
 export default function OrderForm() {
-  const router = useRouter();
   const [formData, setFormData] = useState<OrderFormData>({
     name: '', phone: '', city: 'الجزائر', qty: 1, notes: ''
   });
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [saveMessage, setSaveMessage] = useState('');
   const [errors, setErrors] = useState<{ name?: string; phone?: string; qty?: string }>({});
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -61,20 +60,38 @@ export default function OrderForm() {
       date: new Date().toLocaleString('ar-DZ')
     };
 
-    const apiRequest = fetch('/api/order', {
+    const message = productConfig.whatsappMessage(orderData);
+    const waUrl = `https://wa.me/${productConfig.whatsappNumber}?text=${encodeURIComponent(message)}`;
+    const whatsappTab = window.open('about:blank', '_blank');
+
+    try {
+      const response = await fetch('/api/order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderData),
-        keepalive: true
-      }).catch((err) => console.error('API error:', err));
+      });
+      const result = await response.json().catch(() => null);
 
-    // Open WhatsApp
-    const message = productConfig.whatsappMessage(orderData);
-    const waUrl = `https://wa.me/${productConfig.whatsappNumber}?text=${encodeURIComponent(message)}`;
-    window.location.href = waUrl;
-    // Keep the WhatsApp handoff inside the original user gesture, then show confirmation.
-    window.setTimeout(() => router.push('/thank-you'), 1500);
-    void apiRequest;
+      if (!response.ok || result?.success !== true) {
+        setStatus('error');
+        setSaveMessage(result?.message || 'تعذر تسجيل الطلب. يمكنك إكماله عبر واتساب.');
+      } else if (result.persisted) {
+        setStatus('success');
+        setSaveMessage('تم حفظ الطلب بنجاح. أرسل رسالة واتساب لتأكيده.');
+      } else {
+        setStatus('success');
+        setSaveMessage('لم يُحفظ الطلب في جدول. أرسل رسالة واتساب لإتمامه.');
+      }
+    } catch {
+      setStatus('error');
+      setSaveMessage('تعذر الاتصال بخدمة تسجيل الطلب. يمكنك إكماله عبر واتساب.');
+    }
+
+    if (whatsappTab) {
+      whatsappTab.location.href = waUrl;
+    } else {
+      window.location.assign(waUrl);
+    }
   };
 
   const total = formData.qty * (productConfig.price || 0);
@@ -126,8 +143,10 @@ export default function OrderForm() {
                   </>
                 )}
                 {status === 'loading' && <span className={styles.spinner}></span>}
-                {status === 'success' && <span className={styles.checkmark}>✓ تم إرسال الطلب بنجاح!</span>}
+                {status === 'success' && <span className={styles.checkmark}>✓ تم تجهيز الطلب</span>}
+                {status === 'error' && 'المتابعة عبر واتساب'}
               </button>
+              {saveMessage && <p role="status" aria-live="polite">{saveMessage}</p>}
             </form>
 
             <div className={styles.summary}>
