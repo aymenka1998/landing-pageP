@@ -103,6 +103,11 @@
       "src": "/images/product-side.jpg",
       "title": "على المعصم",
       "desc": ""
+    },
+    {
+      "src": "/images/product-back.jpg",
+      "title": "الجهة الخلفية",
+      "desc": ""
     }
   ],
   "features": [
