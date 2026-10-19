@@ -101,18 +101,8 @@
     },
     {
       "src": "/images/product-side.jpg",
-      "title": "المنظر الجانبي",
-      "desc": "إطار تيتانيوم نحيف وزر تاج رقمي"
-    },
-    {
-      "src": "/images/product-back.jpg",
-      "title": "الجهة الخلفية",
-      "desc": "حساسات نبضات القلب والأكسجين"
-    },
-    {
-      "src": "/images/product-wrist.jpg",
       "title": "على المعصم",
-      "desc": "تصميم أنيق يلائم استخدامك اليومي"
+      "desc": ""
     }
   ],
   "features": [
