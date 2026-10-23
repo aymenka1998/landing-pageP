@@ -3,9 +3,10 @@
 import React from 'react';
 import Link from 'next/link';
 import styles from './ThankYou.module.css';
-import productConfig from '@/config/product';
+import { useProductConfig } from '@/config/ProductConfigProvider';
 
 export default function ThankYou() {
+  const productConfig = useProductConfig();
   const upsell = productConfig.thankYou.upsell;
   const currentYear = new Date().getFullYear();
   const waNumber = productConfig.whatsappNumber || '213000000000';

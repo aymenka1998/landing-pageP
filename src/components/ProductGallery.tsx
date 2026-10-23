@@ -3,9 +3,10 @@
 import React from 'react';
 import Image from 'next/image';
 import styles from './ProductGallery.module.css';
-import productConfig from '@/config/product';
+import { useProductConfig } from '@/config/ProductConfigProvider';
 
 export default function ProductGallery() {
+  const productConfig = useProductConfig();
   const images = productConfig.images || [];
 
   return (

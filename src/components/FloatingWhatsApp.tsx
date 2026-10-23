@@ -1,9 +1,10 @@
 'use client';
 import { useState, useEffect } from 'react';
-import productConfig from '@/config/product';
+import { useProductConfig } from '@/config/ProductConfigProvider';
 import styles from './FloatingWhatsApp.module.css';
 
 export default function FloatingWhatsApp() {
+  const productConfig = useProductConfig();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {

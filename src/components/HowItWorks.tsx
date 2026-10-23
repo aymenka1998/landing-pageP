@@ -1,9 +1,10 @@
 'use client';
 import { useEffect, useRef } from 'react';
-import productConfig from '@/config/product';
+import { useProductConfig } from '@/config/ProductConfigProvider';
 import styles from './HowItWorks.module.css';
 
 export default function HowItWorks() {
+  const productConfig = useProductConfig();
   const sectionRef = useRef<HTMLElement>(null);
   
   useEffect(() => {

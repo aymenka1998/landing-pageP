@@ -1,8 +1,9 @@
 'use client';
-import productConfig from '@/config/product';
+import { useProductConfig } from '@/config/ProductConfigProvider';
 import styles from './Footer.module.css';
 
 export default function Footer() {
+  const productConfig = useProductConfig();
   const currentYear = new Date().getFullYear();
   const { footer } = productConfig;
 

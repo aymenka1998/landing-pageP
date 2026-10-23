@@ -3,9 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import styles from './Hero.module.css';
-import productConfig from '@/config/product';
+import { useProductConfig } from '@/config/ProductConfigProvider';
 
 export default function Hero() {
+  const productConfig = useProductConfig();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   useEffect(() => {

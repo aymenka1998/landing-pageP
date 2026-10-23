@@ -2,6 +2,7 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 import './globals.css';
+import { ProductConfigProvider } from '@/config/ProductConfigProvider';
 
 const tajawal = Tajawal({
   subsets: ['arabic'],
@@ -25,7 +26,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
   return (
     <html lang="ar" dir="rtl" className={tajawal.className}>
       <body>
-        <main>{children}</main>
+        <ProductConfigProvider><main>{children}</main></ProductConfigProvider>
       </body>
     </html>
   );

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import productConfig from '@/config/product';
+import { getProductConfig } from '@/config/getProduct';
 
 const PHONE_PATTERN = /^(?:0[567]\d{8}|\+?213[567]\d{8})$/;
 const MAX_BODY_BYTES = 16 * 1024;
@@ -9,6 +9,7 @@ function errorResponse(message: string, status: number) {
 }
 
 export async function POST(request: Request) {
+  const productConfig = await getProductConfig();
   const contentLength = Number(request.headers.get('content-length') || 0);
   if (contentLength > MAX_BODY_BYTES) {
     return errorResponse('حجم بيانات الطلب أكبر من المسموح.', 413);

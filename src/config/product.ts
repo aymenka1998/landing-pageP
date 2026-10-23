@@ -14,6 +14,7 @@ export type OrderData = {
   product: string;
   price: number;
   total: number;
+  currency?: string;
   date: string;
 };
 
@@ -25,9 +26,9 @@ const productConfig = {
     `🛒 *طلب جديد*\n` +
     `━━━━━━━━━━━━\n` +
     `📦 المنتج: ${order.product}\n` +
-    `💰 السعر: ${order.price} ${productData.currency}\n` +
+    `💰 السعر: ${order.price} ${order.currency || productData.currency}\n` +
     `🔢 الكمية: ${order.qty}\n` +
-    `💵 الإجمالي: ${order.total} ${productData.currency}\n` +
+    `💵 الإجمالي: ${order.total} ${order.currency || productData.currency}\n` +
     `━━━━━━━━━━━━\n` +
     `👤 الاسم: ${order.name}\n` +
     `📱 الجوال: ${order.phone}\n` +

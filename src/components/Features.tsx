@@ -2,9 +2,10 @@
 
 import React, { useEffect } from 'react';
 import styles from './Features.module.css';
-import productConfig from '@/config/product';
+import { useProductConfig } from '@/config/ProductConfigProvider';
 
 export default function Features() {
+  const productConfig = useProductConfig();
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {

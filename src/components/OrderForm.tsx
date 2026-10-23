@@ -1,6 +1,6 @@
 'use client';
 import { useState, type ChangeEvent, type FormEvent } from 'react';
-import productConfig from '@/config/product';
+import { useProductConfig } from '@/config/ProductConfigProvider';
 import styles from './OrderForm.module.css';
 
 type OrderFormData = {
@@ -12,6 +12,7 @@ type OrderFormData = {
 };
 
 export default function OrderForm() {
+  const productConfig = useProductConfig();
   const [formData, setFormData] = useState<OrderFormData>({
     name: '', phone: '', city: 'الجزائر', qty: 1, notes: ''
   });
@@ -57,6 +58,7 @@ export default function OrderForm() {
       product: productConfig.name,
       price: productConfig.price,
       total: total,
+      currency: productConfig.currency,
       date: new Date().toLocaleString('ar-DZ')
     };
 
