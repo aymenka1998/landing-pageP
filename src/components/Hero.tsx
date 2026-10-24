@@ -76,11 +76,11 @@ export default function Hero() {
         <div className={`${styles.imageContent} ${styles.reveal}`}>
           <div className={styles.galleryContainer}>
             <div className={styles.mainImageWrapper}>
-              <span className={styles.angleTag}>{currentImage.title}</span>
+              {currentImage.title && <span className={styles.angleTag}>{currentImage.title}</span>}
               <Image
                 key={currentImage.src} 
                 src={currentImage.src} 
-                alt={currentImage.title} 
+                alt={currentImage.title || productConfig.name} 
                 fill
                 sizes="(max-width: 900px) 100vw, 480px"
                 preload
@@ -116,7 +116,7 @@ export default function Hero() {
                   onClick={() => setSelectedImageIndex(idx)}
                   className={`${styles.thumbBtn} ${selectedImageIndex === idx ? styles.activeThumb : ''}`}
                 >
-                  <Image src={img.src} alt={img.title} fill sizes="70px" className={styles.thumbImage} />
+                  <Image src={img.src} alt={img.title || productConfig.name} fill sizes="70px" className={styles.thumbImage} />
                 </button>
               ))}
             </div>

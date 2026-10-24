@@ -24,17 +24,17 @@ export default function ProductGallery() {
               <div className={styles.imageContainer}>
                 <Image
                   src={img.src}
-                  alt={img.title}
+                  alt={img.title || productConfig.name}
                   fill
                   sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 25vw"
                   className={styles.image}
                 />
                 <div className={styles.overlay}>
-                  <span className={styles.angleTag}>{img.title}</span>
+                  {img.title && <span className={styles.angleTag}>{img.title}</span>}
                 </div>
               </div>
               <div className={styles.cardBody}>
-                <h3 className={styles.cardTitle}>{img.title}</h3>
+                {img.title && <h3 className={styles.cardTitle}>{img.title}</h3>}
                 <p className={styles.cardDesc}>{img.desc}</p>
               </div>
             </div>
