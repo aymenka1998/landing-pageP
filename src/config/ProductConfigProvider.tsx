@@ -3,10 +3,18 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import productConfig from './product';
 
+type InitialProductConfig = Omit<typeof productConfig, 'whatsappMessage'>;
+
 const ProductContext = createContext(productConfig);
 
-export function ProductConfigProvider({ children }: { children: ReactNode }) {
-  const [config, setConfig] = useState(productConfig);
+export function ProductConfigProvider({
+  children,
+  initialConfig,
+}: {
+  children: ReactNode;
+  initialConfig?: InitialProductConfig;
+}) {
+  const [config, setConfig] = useState(() => ({ ...productConfig, ...initialConfig }));
 
   useEffect(() => {
     let stopped = false;

@@ -15,13 +15,24 @@ export async function generateMetadata(): Promise<Metadata> {
   const product = await getProductConfig();
   const title = [product.name, product.tagline].filter(Boolean).join(' | ');
   const description = product.description || product.tagline || product.name;
+  const image = product.images?.find((item) => typeof item.src === 'string' && /^https?:\/\//i.test(item.src))?.src;
 
   return {
     title,
     description,
     keywords: [product.name, product.type, 'متجر إلكتروني'].filter(Boolean),
-    openGraph: { title, description, type: 'website' },
-    twitter: { card: 'summary', title, description },
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+      ...(image ? { images: [{ url: image, alt: title }] } : {}),
+    },
+    twitter: {
+      card: image ? 'summary_large_image' : 'summary',
+      title,
+      description,
+      ...(image ? { images: [image] } : {}),
+    },
   };
 }
 
@@ -31,11 +42,16 @@ export const viewport: Viewport = {
   themeColor: '#0a0a0f',
 };
 
-export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+  const product = await getProductConfig();
+  const { whatsappMessage: _whatsappMessage, ...initialConfig } = product;
+
   return (
     <html lang="ar" dir="rtl" className={tajawal.className}>
       <body>
-        <ProductConfigProvider><main>{children}</main></ProductConfigProvider>
+        <ProductConfigProvider initialConfig={initialConfig}>
+          <main>{children}</main>
+        </ProductConfigProvider>
       </body>
     </html>
   );
