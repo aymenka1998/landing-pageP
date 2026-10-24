@@ -10,13 +10,16 @@ export function ProductConfigProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     fetch('/api/product', { cache: 'no-store' })
       .then(async (response) => {
-        const source = response.headers.get('X-Product-Config-Source');
-        const warning = response.headers.get('X-Product-Config-Warning');
+        const result = await response.json();
+        const source = result?._sync?.source || response.headers.get('X-Product-Config-Source');
+        const warning = result?._sync?.warning || response.headers.get('X-Product-Config-Warning');
+        if (!response.ok) throw new Error(warning || `Product configuration request failed (HTTP ${response.status}).`);
         if (warning) console.error(`[product-config] ${warning}`);
         else if (source !== 'supabase') {
           console.warn('[product-config] Landing page is using bundled static data. Set PRODUCT_CONFIG_SOURCE=supabase and the Supabase URL/publishable key in this Vercel project to receive dashboard changes.');
         }
-        return response.ok ? response.json() : null;
+        const { _sync: _syncInfo, ...data } = result;
+        return data;
       })
       .then((data) => { if (data) setConfig((current) => ({ ...current, ...data })); })
       .catch((error) => console.error('[product-config] Could not load /api/product:', error));
