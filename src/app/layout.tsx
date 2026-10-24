@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 import './globals.css';
 import { ProductConfigProvider } from '@/config/ProductConfigProvider';
+import { getProductConfig } from '@/config/getProduct';
 
 const tajawal = Tajawal({
   subsets: ['arabic'],
@@ -10,11 +11,19 @@ const tajawal = Tajawal({
   display: 'swap',
 });
 
-export const metadata: Metadata = {
-  title: 'الساعة الذكية برو | تكنولوجيا المستقبل بين يديك',
-  description: 'اكتشف الجيل الجديد من الساعات الذكية. تصميم عصري، بطارية تدوم 7 أيام، مقاومة للماء، وتتبع صحي متقدم. اطلب الآن والدفع عند الاستلام.',
-  keywords: 'ساعة ذكية، ساعة رياضية، تقنية، متجر الكتروني',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const product = await getProductConfig();
+  const title = [product.name, product.tagline].filter(Boolean).join(' | ');
+  const description = product.description || product.tagline || product.name;
+
+  return {
+    title,
+    description,
+    keywords: [product.name, product.type, 'متجر إلكتروني'].filter(Boolean),
+    openGraph: { title, description, type: 'website' },
+    twitter: { card: 'summary', title, description },
+  };
+}
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -31,4 +40,3 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
     </html>
   );
 }
-

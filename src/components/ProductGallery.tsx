@@ -13,7 +13,7 @@ export default function ProductGallery() {
     <section className={styles.gallerySection}>
       <div className="container">
         <h2 className="section-title">معرض الصور من جميع الزوايا</h2>
-        <p className="section-subtitle">شاهد أدق التفاصيل والجودة العالية للساعة الذكية برو</p>
+        <p className="section-subtitle">شاهد أدق التفاصيل والجودة العالية لـ {productConfig.name}</p>
 
         <div className={styles.grid}>
           {images.map((img, index) => (
