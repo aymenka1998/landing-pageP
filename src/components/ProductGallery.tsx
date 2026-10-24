@@ -18,7 +18,7 @@ export default function ProductGallery() {
         <div className={styles.grid}>
           {images.map((img, index) => (
             <div
-              key={index}
+              key={`${img.src}-${img.title}-${index}`}
               className={styles.card}
             >
               <div className={styles.imageContainer}>

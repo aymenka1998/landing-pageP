@@ -112,7 +112,7 @@ export default function Hero() {
             <div className={styles.thumbnailsList}>
               {images.map((img, idx) => (
                 <button
-                  key={idx}
+                  key={`${img.src}-${img.title}-${idx}`}
                   onClick={() => setSelectedImageIndex(idx)}
                   className={`${styles.thumbBtn} ${selectedImageIndex === idx ? styles.activeThumb : ''}`}
                 >
