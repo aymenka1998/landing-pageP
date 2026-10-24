@@ -1,8 +1,15 @@
-import { NextResponse } from 'next/server';
-import { getProductConfig } from '@/config/getProduct';
+﻿import { NextResponse } from 'next/server';
+import { getProductConfigResult } from '@/config/getProduct';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  return NextResponse.json(await getProductConfig(), { headers: { 'Cache-Control': 'no-store' } });
+  const result = await getProductConfigResult();
+  return NextResponse.json(result.config, {
+    headers: {
+      'Cache-Control': 'no-store, max-age=0',
+      'X-Product-Config-Source': result.source,
+      ...(result.warning ? { 'X-Product-Config-Warning': result.warning } : {}),
+    },
+  });
 }
