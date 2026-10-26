@@ -1,8 +1,9 @@
-﻿import { Tajawal } from 'next/font/google';
+import { Tajawal } from 'next/font/google';
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 import './globals.css';
 import { ProductConfigProvider } from '@/config/ProductConfigProvider';
+import TrackingPixels from '@/components/TrackingPixels';
 import { getProductConfig } from '@/config/getProduct';
 
 const tajawal = Tajawal({
@@ -50,6 +51,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <html lang="ar" dir="rtl" className={tajawal.className}>
       <body>
         <ProductConfigProvider initialConfig={initialConfig}>
+          <TrackingPixels />
           <main>{children}</main>
         </ProductConfigProvider>
       </body>

@@ -2,6 +2,7 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { useProductConfig } from '@/config/ProductConfigProvider';
 import styles from './OrderForm.module.css';
+import { trackLead } from './TrackingPixels';
 
 type OrderFormData = {
   name: string;
@@ -79,6 +80,7 @@ export default function OrderForm() {
         setStatus('error');
         setSaveMessage(result?.message || 'تعذر تسجيل الطلب. يمكنك إكماله عبر واتساب.');
       } else if (result.persisted) {
+        trackLead({ product: orderData.product });
         setStatus('success');
         setSaveMessage('تم حفظ الطلب بنجاح. أرسل رسالة واتساب لتأكيده.');
       } else {

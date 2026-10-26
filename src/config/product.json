@@ -93,6 +93,10 @@
   },
   "whatsappNumber": "213696741267",
   "email": "",
+  "tracking": {
+    "metaPixelId": "",
+    "tiktokPixelId": ""
+  },
   "images": [
     {
       "src": "/images/product-side.jpg",
