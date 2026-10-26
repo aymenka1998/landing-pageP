@@ -20,6 +20,7 @@ export type OrderData = {
 
 const productConfig = {
   ...productData,
+  testimonials: productData.testimonials as Array<{ name: string; rating: number; text: string; city: string }>,
 
   // قالب رسالة الواتساب - يُرسل تلقائياً عند الطلب
   whatsappMessage: (order: OrderData) =>

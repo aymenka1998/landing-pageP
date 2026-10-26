@@ -14,6 +14,7 @@ export default function Footer() {
           <div className={styles.brand}>
             <h2>{footer.brand}</h2>
             <p>{footer.description}</p>
+            <p><a href="/privacy">سياسة الخصوصية</a></p>
           </div>
           <div className={styles.contact}>
             <h3>تواصل معنا</h3>

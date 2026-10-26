@@ -40,7 +40,7 @@ export default function Newsletter() {
               <input id="newsletter-email" type="email" autoComplete="email" required maxLength={254} value={email} onChange={(event) => setEmail(event.target.value)} placeholder="name@example.com" dir="ltr" />
               <button type="submit" disabled={state === 'sending'}>{state === 'sending' ? 'جارٍ الاشتراك…' : 'اشترك الآن'}</button>
             </div>
-            <label className={styles.consent}><input type="checkbox" required /> أوافق على استلام أخبار وعروض عبر البريد الإلكتروني، ويمكنني إلغاء الاشتراك لاحقًا.</label>
+            <label className={styles.consent}><input type="checkbox" required /> أوافق على حفظ بريدي الإلكتروني لإرسال أخبار وعروض. لطلب إيقاف الرسائل أو حذف بياناتي، أتواصل مع المتجر عبر بيانات الاتصال في أسفل الصفحة. <a href="/privacy">سياسة الخصوصية</a>.</label>
           </form>
           <p className={state === 'error' ? styles.error : styles.message} role="status" aria-live="polite">
             {state === 'success' ? 'تم تسجيل اشتراكك بنجاح، شكرًا لك.' : state === 'error' ? 'تعذر إتمام الاشتراك. حاول مرة أخرى لاحقًا.' : ''}

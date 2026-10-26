@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useSyncExternalStore } from 'react';
 import { useProductConfig } from '@/config/ProductConfigProvider';
 
 type PixelParams = {
@@ -40,6 +40,16 @@ declare global {
 
 const initializedMetaIds = new Set<string>();
 const initializedTikTokIds = new Set<string>();
+const subscribeToConsent = (callback: () => void) => {
+  window.addEventListener('marketing-consent-change', callback);
+  window.addEventListener('storage', callback);
+  return () => {
+    window.removeEventListener('marketing-consent-change', callback);
+    window.removeEventListener('storage', callback);
+  };
+};
+const getConsent = () => window.localStorage.getItem('marketing-consent');
+const getServerConsent = () => null;
 
 function initializeMetaPixel(id: string) {
   if (!window.fbq) {
@@ -108,6 +118,7 @@ function initializeTikTokPixel(id: string) {
 }
 
 export function trackLead({ product }: { product: string }) {
+  if (window.localStorage.getItem('marketing-consent') !== 'accepted') return;
   const params: PixelParams = { content_name: product, content_type: 'product' };
   window.fbq?.('track', 'Lead', params);
   window.ttq?.track('Lead', params);
@@ -117,11 +128,26 @@ export default function TrackingPixels() {
   const config = useProductConfig();
   const metaPixelId = config.tracking?.metaPixelId?.trim() || '';
   const tiktokPixelId = config.tracking?.tiktokPixelId?.trim() || '';
+  const consent = useSyncExternalStore(subscribeToConsent, getConsent, getServerConsent);
 
   useEffect(() => {
+    if (consent !== 'accepted') return;
     if (/^\d{5,30}$/.test(metaPixelId)) initializeMetaPixel(metaPixelId);
     if (/^[A-Za-z0-9_-]{5,64}$/.test(tiktokPixelId)) initializeTikTokPixel(tiktokPixelId);
-  }, [metaPixelId, tiktokPixelId]);
+  }, [consent, metaPixelId, tiktokPixelId]);
 
-  return null;
+  if (consent !== null) return <button type="button" onClick={() => saveMarketingConsent('')} aria-label="تغيير تفضيلات التتبع" style={{ position: 'fixed', zIndex: 999, bottom: 12, left: 12, borderRadius: 999, padding: '8px 12px', border: '1px solid #ffffff44', background: '#17131f', color: '#fff' }}>تفضيلات الخصوصية</button>;
+  return <aside dir="rtl" style={{ position: 'fixed', zIndex: 1000, bottom: 16, right: 16, left: 16, maxWidth: 620, margin: 'auto', padding: 18, borderRadius: 14, background: '#17131f', color: '#fff', boxShadow: '0 8px 32px #0008', border: '1px solid #ffffff26' }}>
+    <p style={{ margin: '0 0 12px', lineHeight: 1.7 }}>نستخدم ملفات تعريف الارتباط التسويقية من Meta وTikTok عند تفعيلها لقياس الزيارات والطلبات. يمكنك القبول أو الرفض. <a href="/privacy" style={{ color: '#c9a4ff' }}>سياسة الخصوصية</a></p>
+    <div style={{ display: 'flex', gap: 10 }}>
+      <button type="button" onClick={() => saveMarketingConsent('accepted')}>أوافق على التتبع التسويقي</button>
+      <button type="button" onClick={() => saveMarketingConsent('rejected')}>أرفض</button>
+    </div>
+  </aside>;
+}
+
+function saveMarketingConsent(value: 'accepted' | 'rejected' | '') {
+  if (value) window.localStorage.setItem('marketing-consent', value);
+  else window.localStorage.removeItem('marketing-consent');
+  window.dispatchEvent(new Event('marketing-consent-change'));
 }
