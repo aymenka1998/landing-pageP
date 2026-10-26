@@ -27,6 +27,11 @@ export async function POST(request: Request) {
   }
 
   const input = body as Record<string, unknown>;
+
+  // Quietly discard bot submissions caught by the form honeypot.
+  if (typeof input.website === "string" && input.website.trim()) {
+    return NextResponse.json({ success: true, persisted: false });
+  }
   const name = typeof input.name === 'string' ? input.name.trim() : '';
   const phone = typeof input.phone === 'string' ? input.phone.replace(/[\s()-]/g, '') : '';
   const city = typeof input.city === 'string' ? input.city.trim() : '';

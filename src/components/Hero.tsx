@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import styles from './Hero.module.css';
 import { useProductConfig } from '@/config/ProductConfigProvider';
@@ -8,20 +8,6 @@ import { useProductConfig } from '@/config/ProductConfigProvider';
 export default function Hero() {
   const productConfig = useProductConfig();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add(styles.active);
-        }
-      });
-    }, { threshold: 0.1 });
-    
-    document.querySelectorAll(`.${styles.reveal}`).forEach(el => observer.observe(el));
-    
-    return () => observer.disconnect();
-  }, []);
 
   const scrollToOrder = () => {
     const form = document.getElementById('order-form');
@@ -52,7 +38,7 @@ export default function Hero() {
       </div>
       
       <div className={styles.container}>
-        <div className={`${styles.textContent} ${styles.reveal}`}>
+        <div className={styles.textContent}>
           <div className={styles.badge}>{productConfig.badge} - خصم {discount}%</div>
           <h1 className={styles.title}>{productConfig.name}</h1>
           <p className={styles.tagline}>{productConfig.tagline}</p>
@@ -73,7 +59,7 @@ export default function Hero() {
           </div>
         </div>
 
-        <div className={`${styles.imageContent} ${styles.reveal}`}>
+        <div className={styles.imageContent}>
           <div className={styles.galleryContainer}>
             <div className={styles.mainImageWrapper}>
               {currentImage.title && <span className={styles.angleTag}>{currentImage.title}</span>}
@@ -89,6 +75,7 @@ export default function Hero() {
               <div className={styles.imageGlow}></div>
               
               <button 
+                type="button"
                 onClick={handlePrevImage} 
                 className={`${styles.navBtn} ${styles.prevBtn}`}
                 aria-label="الصورة السابقة"
@@ -96,6 +83,7 @@ export default function Hero() {
                 ‹
               </button>
               <button 
+                type="button"
                 onClick={handleNextImage} 
                 className={`${styles.navBtn} ${styles.nextBtn}`}
                 aria-label="الصورة التالية"
@@ -112,8 +100,11 @@ export default function Hero() {
             <div className={styles.thumbnailsList}>
               {images.map((img, idx) => (
                 <button
+                  type="button"
                   key={`${img.src}-${img.title}-${idx}`}
                   onClick={() => setSelectedImageIndex(idx)}
+                  aria-label={`عرض صورة ${img.title || productConfig.name}`}
+                  aria-pressed={selectedImageIndex === idx}
                   className={`${styles.thumbBtn} ${selectedImageIndex === idx ? styles.activeThumb : ''}`}
                 >
                   <Image src={img.src} alt={img.title || productConfig.name} fill sizes="70px" className={styles.thumbImage} />

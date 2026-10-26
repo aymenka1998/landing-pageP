@@ -5,6 +5,11 @@
   position: relative;
 }
 
+@media (max-width: 640px) {
+  .gallerySection { padding: 3rem 0; }
+  .grid { grid-template-columns: 1fr; gap: 1.25rem; margin-top: 2rem; }
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(1, 1fr);

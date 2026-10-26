@@ -2,7 +2,7 @@ import Hero from '@/components/Hero';
 import ProductGallery from '@/components/ProductGallery';
 import Features from '@/components/Features';
 import HowItWorks from '@/components/HowItWorks';
-import Testimonials from '@/components/Testimonials';
+import Newsletter from '@/components/Newsletter';
 import FAQ from '@/components/FAQ';
 import OrderForm from '@/components/OrderForm';
 import Footer from '@/components/Footer';
@@ -15,7 +15,7 @@ export default function Home() {
       <ProductGallery />
       <Features />
       <HowItWorks />
-      <Testimonials />
+      <Newsletter />
       <FAQ />
       <OrderForm />
       <Footer />

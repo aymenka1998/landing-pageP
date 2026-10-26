@@ -1,23 +1,11 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { useProductConfig } from '@/config/ProductConfigProvider';
 import styles from './FAQ.module.css';
 
 export default function FAQ() {
   const productConfig = useProductConfig();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('active');
-      });
-    }, { threshold: 0.1 });
-    const els = sectionRef.current?.querySelectorAll('.reveal');
-    els?.forEach(el => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
 
   const toggle = (i: number) => {
     if (activeIndex === i) setActiveIndex(null);
@@ -25,18 +13,18 @@ export default function FAQ() {
   };
 
   return (
-    <section className={`section ${styles.faqSection}`} ref={sectionRef}>
+    <section className={`section ${styles.faqSection}`}>
       <div className="container">
-        <h2 className="section-title reveal">الأسئلة الشائعة</h2>
-        <p className="section-subtitle reveal">إجابات على أكثر الأسئلة شيوعاً</p>
+        <h2 className="section-title">الأسئلة الشائعة</h2>
+        <p className="section-subtitle">إجابات على أكثر الأسئلة شيوعاً</p>
         <div className={styles.faqList}>
           {productConfig.faq.map((item, i) => (
-            <div key={i} className={`${styles.faqItem} reveal ${activeIndex === i ? styles.active : ''}`} onClick={() => toggle(i)}>
-              <div className={styles.question}>
+            <div key={i} className={`${styles.faqItem} ${activeIndex === i ? styles.active : ''}`}>
+              <button type="button" className={styles.question} aria-expanded={activeIndex === i} aria-controls={`faq-answer-${i}`} onClick={() => toggle(i)}>
                 <h3>{item.question}</h3>
-                <span className={styles.icon}>{activeIndex === i ? '−' : '+'}</span>
-              </div>
-              <div className={styles.answerWrap} style={{ maxHeight: activeIndex === i ? '200px' : '0' }}>
+                <span className={styles.icon} aria-hidden="true">{activeIndex === i ? '−' : '+'}</span>
+              </button>
+              <div id={`faq-answer-${i}`} className={styles.answerWrap} hidden={activeIndex !== i}>
                 <p className={styles.answer}>{item.answer}</p>
               </div>
             </div>

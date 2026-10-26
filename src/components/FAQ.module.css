@@ -13,8 +13,7 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 15px;
   padding: 20px 25px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  transition: none;
   overflow: hidden;
 }
 .faqItem:hover {
@@ -25,9 +24,17 @@
   box-shadow: 0 0 20px rgba(138, 43, 226, 0.1);
 }
 .question {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: right;
+  font: inherit;
+  cursor: pointer;
 }
 .question h3 {
   font-size: 1.2rem;
@@ -37,13 +44,13 @@
 .icon {
   font-size: 1.5rem;
   color: #8a2be2;
-  transition: transform 0.3s ease;
+  transition: none;
 }
 .active .icon {
   transform: rotate(180deg);
 }
 .answerWrap {
-  transition: max-height 0.4s ease;
+  padding-top: 1px;
 }
 .answer {
   color: rgba(255, 255, 255, 0.7);

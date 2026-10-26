@@ -24,6 +24,15 @@ export default function FloatingWhatsApp() {
     <div 
       className={`${styles.floatingBtn} ${visible ? styles.visible : ''}`} 
       onClick={handleClick}
+      role="button"
+      tabIndex={visible ? 0 : -1}
+      aria-label="التواصل معنا عبر واتساب"
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          handleClick();
+        }
+      }}
       title="تواصل معنا"
     >
       <div className={styles.tooltip}>تواصل معنا</div>

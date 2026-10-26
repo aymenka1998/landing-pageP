@@ -55,6 +55,7 @@ export default function OrderForm() {
       city: formData.city,
       qty: Number(formData.qty),
       notes: formData.notes,
+      website: String(new FormData(e.currentTarget).get("website") || ""),
       product: productConfig.name,
       price: productConfig.price,
       total: total,
@@ -107,32 +108,36 @@ export default function OrderForm() {
           
           <div className={styles.content}>
             <form className={styles.form} onSubmit={handleSubmit}>
-              <div className={styles.inputGroup}>
-                <label>الاسم الكامل *</label>
-                <input type="text" name="name" required value={formData.name} onChange={handleChange} placeholder="أدخل اسمك الكامل" />
-                {errors.name && <span className={styles.error}>{errors.name}</span>}
+              <div aria-hidden="true" style={{ position: "absolute", width: 1, height: 1, padding: 0, margin: -1, overflow: "hidden", clip: "rect(0, 0, 0, 0)", whiteSpace: "nowrap", border: 0 }}>
+                <label htmlFor="order-website">Leave this field empty</label>
+                <input id="order-website" type="text" name="website" tabIndex={-1} autoComplete="off" />
               </div>
               <div className={styles.inputGroup}>
-                <label>رقم الجوال *</label>
-                <input type="tel" name="phone" placeholder="+213 5XX XX XX XX" required value={formData.phone} onChange={handleChange} dir="ltr" style={{textAlign: 'right'}} />
-                {errors.phone && <span className={styles.error}>{errors.phone}</span>}
+                <label htmlFor="order-name">الاسم الكامل *</label>
+                <input id="order-name" type="text" name="name" aria-invalid={Boolean(errors.name)} aria-describedby={errors.name ? 'order-name-error' : undefined} required value={formData.name} onChange={handleChange} placeholder="أدخل اسمك الكامل" />
+                {errors.name && <span id="order-name-error" className={styles.error}>{errors.name}</span>}
               </div>
               <div className={styles.inputGroup}>
-                <label>المدينة</label>
-                <select name="city" value={formData.city} onChange={handleChange}>
+                <label htmlFor="order-phone">رقم الجوال *</label>
+                <input id="order-phone" type="tel" name="phone" aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? 'order-phone-error' : undefined} placeholder="+213 5XX XX XX XX" required value={formData.phone} onChange={handleChange} dir="ltr" style={{textAlign: 'right'}} />
+                {errors.phone && <span id="order-phone-error" className={styles.error}>{errors.phone}</span>}
+              </div>
+              <div className={styles.inputGroup}>
+                <label htmlFor="order-city">المدينة</label>
+                <select id="order-city" name="city" value={formData.city} onChange={handleChange}>
                   {productConfig.cities.map(wilaya => <option key={wilaya} value={wilaya}>{wilaya}</option>)}
                 </select>
               </div>
               <div className={styles.row}>
                 <div className={styles.inputGroup}>
-                  <label>الكمية</label>
-                  <input type="number" name="qty" min="1" max={productConfig.maxQty} value={formData.qty} onChange={handleChange} />
-                  {errors.qty && <span className={styles.error}>{errors.qty}</span>}
+                  <label htmlFor="order-quantity">الكمية</label>
+                  <input id="order-quantity" type="number" name="qty" aria-invalid={Boolean(errors.qty)} aria-describedby={errors.qty ? 'order-quantity-error' : undefined} min="1" max={productConfig.maxQty} value={formData.qty} onChange={handleChange} />
+                  {errors.qty && <span id="order-quantity-error" className={styles.error}>{errors.qty}</span>}
                 </div>
               </div>
               <div className={styles.inputGroup}>
-                <label>ملاحظات إضافية</label>
-                <textarea name="notes" rows={3} value={formData.notes} onChange={handleChange} placeholder="اكتب أي ملاحظات إضافية (اختياري)"></textarea>
+                <label htmlFor="order-notes">ملاحظات إضافية</label>
+                <textarea id="order-notes" name="notes" rows={3} value={formData.notes} onChange={handleChange} placeholder="اكتب أي ملاحظات إضافية (اختياري)"></textarea>
               </div>
               
               <button type="submit" className={styles.submitBtn} disabled={status === 'loading' || status === 'success'}>
